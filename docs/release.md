@@ -1,5 +1,37 @@
 # 发布说明 / Release Notes
 
+## v0.1.2
+
+UI polish release focused on the task creation flow.
+
+### Features
+
+- Reworked the task creation dialog to match the task detail dialog style
+- Added the same glass panel, rounded shell, custom close button, DDL date/time row, and bottom action bar
+- Added lightweight date/time arrows and drag support to the task creation dialog
+
+### Verification
+
+The current automated test suite includes 91 tests:
+
+```powershell
+python -m pytest
+```
+
+### Packaging Command
+
+```powershell
+pyinstaller --noconfirm DDL-Reminder.spec
+iscc installer\DDL-Reminder.iss
+```
+
+Release artifacts:
+
+```text
+dist/DDL-Reminder/
+installer_dist/DDL-Reminder-Setup.exe
+```
+
 ## v0.1.1
 
 Second release focused on packaging and installation polish.

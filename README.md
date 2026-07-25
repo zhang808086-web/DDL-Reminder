@@ -304,7 +304,7 @@ Original process documents are kept under [docs/archive](docs/archive/).
 
 ## Current Status
 
-v0.1.1 is an installable local Windows desktop version.
+v0.1.2 is an installable local Windows desktop version.
 
 Completed:
 
@@ -319,6 +319,7 @@ Completed:
 - PyInstaller packaging
 - Custom app icon
 - Inno Setup installer
+- Task creation dialog matches the task detail glass style
 
 Next possible improvements:
 
