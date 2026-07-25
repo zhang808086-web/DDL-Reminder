@@ -1,0 +1,1 @@
+"""DDL Reminder application package."""
