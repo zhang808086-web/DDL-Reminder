@@ -96,7 +96,7 @@ python -m pip install pyinstaller
 打包：
 
 ```powershell
-pyinstaller --noconfirm --windowed --name DDL-Reminder --paths src src\ddl_reminder\main.py
+pyinstaller --noconfirm DDL-Reminder.spec
 ```
 
 打包产物位于：
@@ -143,11 +143,11 @@ v0.1.0 是一个可用的本地 Windows 桌面版本。
 - 单实例运行
 - 开机自启
 - PyInstaller 打包
+- 自定义应用图标
+- Inno Setup 安装器
 
 后续可能改进：
 
-- 添加自定义应用图标
-- 添加安装器
 - 添加数据库迁移支持
 - 继续打磨 UI 细节
 - 支持可配置提醒间隔
@@ -190,7 +190,9 @@ It combines a task list, a lightweight floating window, Windows notifications, s
 - Single-instance app lock
 - Windows autostart
 - Local SQLite storage under AppData
-- PyInstaller packaging for Windows
+- PyInstaller packaging
+- Custom app icon
+- Inno Setup installer for Windows
 
 ## Tech Stack
 
@@ -256,13 +258,25 @@ python -m pip install pyinstaller
 Build:
 
 ```powershell
-pyinstaller --noconfirm --windowed --name DDL-Reminder --paths src src\ddl_reminder\main.py
+pyinstaller --noconfirm DDL-Reminder.spec
 ```
 
 The packaged app is generated at:
 
 ```text
 dist/DDL-Reminder/DDL-Reminder.exe
+```
+
+Build installer:
+
+```powershell
+iscc installer\DDL-Reminder.iss
+```
+
+The installer is generated at:
+
+```text
+installer_dist/DDL-Reminder-Setup.exe
 ```
 
 ## Data Location
@@ -290,7 +304,7 @@ Original process documents are kept under [docs/archive](docs/archive/).
 
 ## Current Status
 
-v0.1.0 is a usable local Windows desktop version.
+v0.1.1 is an installable local Windows desktop version.
 
 Completed:
 
@@ -303,11 +317,11 @@ Completed:
 - Single instance
 - Autostart
 - PyInstaller packaging
+- Custom app icon
+- Inno Setup installer
 
 Next possible improvements:
 
-- Add custom app icon
-- Add installer
 - Add database migration support
 - Polish UI details
 - Add configurable reminder intervals

@@ -4,7 +4,7 @@ import sys
 import logging
 
 from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QSystemTrayIcon
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QAction, QIcon
 from PySide6.QtCore import QTimer
 
 
@@ -17,6 +17,7 @@ from ddl_reminder.infrastructure.database import (
 )
 from ddl_reminder.infrastructure.sqlalchemy_task_repository import SQLAlchemyTaskRepository
 from ddl_reminder.ui.main_window import MainWindow
+from ddl_reminder.ui.resources import app_icon_path
 from ddl_reminder.ui.theme import apply_codex_font
 
 from ddl_reminder.ui.floating_window import FloatingWindow
@@ -42,6 +43,8 @@ def main() -> int:
     logging.info("DDL-Reminder started")
     app = QApplication(sys.argv)
     apply_codex_font(app)
+    app_icon = QIcon(str(app_icon_path()))
+    app.setWindowIcon(app_icon)
     
     instance_lock = SingleInstanceLock()
     
@@ -61,6 +64,8 @@ def main() -> int:
     autostart = WindowsAutostart()
     main_window = MainWindow(task_service, autostart)
     floating_window = FloatingWindow(task_service)
+    main_window.setWindowIcon(app_icon)
+    floating_window.setWindowIcon(app_icon)
     
     def show_main_window() -> None:
         main_window.show()
@@ -77,9 +82,7 @@ def main() -> int:
     
 
     
-    tray_icon.setIcon(
-        app.style().standardIcon(app.style().StandardPixmap.SP_ComputerIcon)
-    )
+    tray_icon.setIcon(app_icon)
     tray_icon.setToolTip("DDL Reminder")
     
     def handle_tray_activated(reason) -> None:

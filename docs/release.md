@@ -1,5 +1,40 @@
 # 发布说明 / Release Notes
 
+## v0.1.1
+
+Second release focused on packaging and installation polish.
+
+### Features
+
+- Custom application icon
+- Desktop shortcut icon
+- System tray icon
+- Inno Setup installer
+- Autostart launch now shows only the floating DDL window
+- Autostart can be toggled from the Settings window
+
+### Verification
+
+The current automated test suite includes 90 tests:
+
+```powershell
+python -m pytest
+```
+
+### Packaging Command
+
+```powershell
+pyinstaller --noconfirm DDL-Reminder.spec
+iscc installer\DDL-Reminder.iss
+```
+
+Release artifacts:
+
+```text
+dist/DDL-Reminder/
+installer_dist/DDL-Reminder-Setup.exe
+```
+
 ## v0.1.0
 
 第一个可用的 Windows 桌面版本。
@@ -48,8 +83,6 @@ Manual validation has covered:
 
 ### 已知限制 / Known Limitations
 
-- 暂无安装器 / No installer yet
-- 暂无自定义应用图标 / No custom app icon yet
 - 暂无数据库迁移工具 / No database migration tool yet
 - 暂无云同步 / No cloud sync
 - 暂无重复任务 / No recurring tasks
@@ -58,7 +91,7 @@ Manual validation has covered:
 ### 打包命令 / Packaging Command
 
 ```powershell
-pyinstaller --noconfirm --windowed --name DDL-Reminder --paths src src\ddl_reminder\main.py
+pyinstaller --noconfirm DDL-Reminder.spec
 ```
 
 发布产物：
@@ -67,4 +100,18 @@ Release artifact:
 
 ```text
 dist/DDL-Reminder/
+```
+
+### 安装器 / Installer
+
+Install Inno Setup, then compile:
+
+```powershell
+iscc installer\DDL-Reminder.iss
+```
+
+Installer artifact:
+
+```text
+installer_dist/DDL-Reminder-Setup.exe
 ```
