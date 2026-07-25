@@ -154,7 +154,7 @@ v0.1.0 是一个可用的本地 Windows 桌面版本。
 
 ## License
 
-暂未选择 License。
+MIT License.
 
 ---
 
@@ -314,4 +314,4 @@ Next possible improvements:
 
 ## License
 
-No license has been selected yet.
+MIT License.
