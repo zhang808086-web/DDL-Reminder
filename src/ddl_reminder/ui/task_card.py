@@ -1,13 +1,22 @@
 from __future__ import annotations
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
+)
 
 from ddl_reminder.ui.theme import CODEX_QSS_FONT_FAMILY, CODEX_SYMBOL_QSS_FONT_FAMILY
 
 
 class TaskCard(QFrame):
     clicked = Signal(int)
+    complete_clicked = Signal(int)
 
     def __init__(
         self,
@@ -99,7 +108,17 @@ class TaskCard(QFrame):
         arrow_label.setAlignment(Qt.AlignCenter)
         arrow_label.setFixedWidth(20)
 
+        complete_button = QPushButton("✓")
+        complete_button.setObjectName("completeButton")
+        complete_button.setToolTip("完成任务")
+        complete_button.setFixedSize(30, 30)
+        complete_button.setCursor(Qt.PointingHandCursor)
+        complete_button.clicked.connect(
+            lambda: self.complete_clicked.emit(self.task_id)
+        )
+
         content_layout.addLayout(text_layout, 1)
+        content_layout.addWidget(complete_button)
         content_layout.addWidget(arrow_label)
 
         root_layout.addLayout(content_layout, 1)
@@ -128,6 +147,21 @@ class TaskCard(QFrame):
                 font-family: __CODEX_SYMBOL_FONT__;
                 font-size: 28px;
                 font-weight: 300;
+            }
+
+            QPushButton#completeButton {
+                background-color: transparent;
+                border: none;
+                border-radius: 15px;
+                color: rgba(38, 49, 61, 150);
+                font-family: __CODEX_SYMBOL_FONT__;
+                font-size: 17px;
+                font-weight: 400;
+            }
+
+            QPushButton#completeButton:hover {
+                background-color: rgba(255, 255, 255, 125);
+                color: #26313D;
             }
             """
         self.setStyleSheet(

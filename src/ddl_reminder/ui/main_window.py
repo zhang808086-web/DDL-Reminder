@@ -478,7 +478,7 @@ class MainWindow(QMainWindow):
                 if query in task.title or query in (task.description or "")
             ]
 
-        return tasks
+        return sorted(tasks, key=lambda task: (task.deadline, task.created_at))
 
     def _is_urgent(self, task, now: datetime) -> bool:
         category, _seconds_diff = classify_deadline(task.deadline, now)

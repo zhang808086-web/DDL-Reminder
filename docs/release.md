@@ -1,5 +1,37 @@
 # 发布说明 / Release Notes
 
+## v0.1.3
+
+Task ordering and floating-window completion release.
+
+### Features
+
+- Main-window task lists are sorted by earliest deadline, then creation time
+- Added a completion button to floating-window task cards
+- Completing a task from the floating window refreshes both task views
+
+### Verification
+
+The current automated test suite includes 93 tests:
+
+```powershell
+python -m pytest
+```
+
+### Packaging Command
+
+```powershell
+pyinstaller --noconfirm DDL-Reminder.spec
+iscc installer\DDL-Reminder.iss
+```
+
+Release artifacts:
+
+```text
+dist/DDL-Reminder/
+installer_dist/DDL-Reminder-Setup.exe
+```
+
 ## v0.1.2
 
 UI polish release focused on the task creation flow.

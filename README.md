@@ -130,7 +130,7 @@ dist/DDL-Reminder/DDL-Reminder.exe
 
 ## 当前状态
 
-v0.1.0 是一个可用的本地 Windows 桌面版本。
+v0.1.3 是一个可安装的本地 Windows 桌面版本。
 
 已完成：
 
@@ -304,7 +304,7 @@ Original process documents are kept under [docs/archive](docs/archive/).
 
 ## Current Status
 
-v0.1.2 is an installable local Windows desktop version.
+v0.1.3 is an installable local Windows desktop version.
 
 Completed:
 

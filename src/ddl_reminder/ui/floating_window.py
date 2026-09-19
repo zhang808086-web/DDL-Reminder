@@ -194,7 +194,16 @@ class FloatingWindow(QWidget):
                 color=color,
             )
             card.clicked.connect(self._open_task_detail_by_id)
+            card.complete_clicked.connect(self._complete_task_by_id)
             self.task_cards_layout.addWidget(card)
+
+    def _complete_task_by_id(self, task_id: int) -> None:
+        if task_id is None:
+            return
+
+        self.task_service.complete_task(task_id)
+        self.refresh_tasks()
+        self.tasks_changed.emit()
 
     def show_from_tray(self) -> None:
         self.show()
