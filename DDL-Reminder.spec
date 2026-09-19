@@ -1,5 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
+
 block_cipher = None
 
 
@@ -20,6 +22,31 @@ a = Analysis(
     cipher=block_cipher,
     noarchive=False,
 )
+
+def _should_bundle_binary(entry) -> bool:
+    binary_name = os.path.basename(entry[0]).lower()
+    destination_dir = os.path.dirname(entry[0]).replace("\\", "/").lower()
+    if destination_dir not in ("", "."):
+        return True
+
+    return not (
+        binary_name == "ucrtbase.dll"
+        or binary_name.startswith("api-ms-win-")
+        or binary_name.startswith("vcruntime")
+        or binary_name.startswith("msvcp")
+        or binary_name.startswith("icu")
+    )
+
+
+# Let Windows use its installed runtime, API-set shims, and ICU libraries.
+# Bundling environment copies at the bundle root can shadow compatible DLLs and
+# prevent Qt6 from loading with an entry-point error on the target machine.
+a.binaries = [
+    entry
+    for entry in a.binaries
+    if _should_bundle_binary(entry)
+]
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(

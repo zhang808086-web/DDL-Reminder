@@ -1,5 +1,5 @@
 #define MyAppName "DDL Reminder"
-#define MyAppVersion "0.1.3"
+#define MyAppVersion "0.1.4"
 #define MyAppPublisher "DDL Reminder"
 #define MyAppExeName "DDL-Reminder.exe"
 
@@ -25,6 +25,13 @@ Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription:
 
 [Files]
 Source: "..\dist\DDL-Reminder\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+[InstallDelete]
+Type: files; Name: "{app}\_internal\ucrtbase.dll"
+Type: files; Name: "{app}\_internal\api-ms-win-*.dll"
+Type: files; Name: "{app}\_internal\VCRUNTIME*.dll"
+Type: files; Name: "{app}\_internal\MSVCP*.dll"
+Type: files; Name: "{app}\_internal\icu*.dll"
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\{#MyAppExeName}"

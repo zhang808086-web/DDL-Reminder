@@ -1,5 +1,19 @@
 # 发布说明 / Release Notes
 
+## v0.1.4
+
+Windows packaging fix release.
+
+### Fixed
+
+- Removed environment-provided runtime and ICU DLLs from the bundle root so Qt6 can load on supported Windows systems.
+- Upgrade installers remove conflicting root-level DLLs left by v0.1.3.
+
+### Verification
+
+- Packaged `Qt6Core.dll`, `Qt6Gui.dll`, and `Qt6Widgets.dll` load successfully in a clean DLL search probe.
+- The full automated test suite passes.
+
 ## v0.1.3
 
 Task ordering and floating-window completion release.
