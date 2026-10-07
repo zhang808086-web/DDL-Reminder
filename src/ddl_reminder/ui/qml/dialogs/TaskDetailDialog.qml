@@ -8,10 +8,11 @@ Dialog {
     id: dialog
     objectName: "taskDetailDialog"
     parent: Overlay.overlay
-    anchors.centerIn: parent
-    width: 500
+    x: Math.round((parent.width - width) / 2)
+    y: Math.round((parent.height - height) / 2)
+    width: Math.min(500, parent.width - 48)
     modal: true
-    padding: 0
+    padding: 26
     property int taskId: -1
     property string taskTitle: ""
     property string description: ""
@@ -51,7 +52,6 @@ Dialog {
     }
     contentItem: ColumnLayout {
         spacing: 18
-        anchors.margins: 26
         RowLayout {
             Layout.fillWidth: true
             Text {
@@ -84,6 +84,7 @@ Dialog {
             font.pixelSize: 13
         }
         Rectangle {
+            objectName: "detailInfoCard"
             Layout.fillWidth: true
             Layout.preferredHeight: 66
             radius: App.Theme.radiusMedium
@@ -97,7 +98,7 @@ Dialog {
                 Text { text: "◷"; color: App.Theme.cyan; font.pixelSize: 20 }
                 Column {
                     spacing: 3
-                    Text { text: "截止时间"; color: App.Theme.textMuted; font.family: App.Theme.fontFamily; font.pixelSize: 10 }
+                    Text { text: dialog.completed ? "原截止时间" : "截止时间"; color: App.Theme.textMuted; font.family: App.Theme.fontFamily; font.pixelSize: 10 }
                     Text { text: dialog.dateText + "  " + dialog.timeText; color: App.Theme.textPrimary; font.family: App.Theme.fontFamily; font.pixelSize: 14; font.weight: Font.DemiBold }
                 }
             }

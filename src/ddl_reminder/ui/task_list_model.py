@@ -47,15 +47,21 @@ class TaskListModel(QAbstractListModel):
     def replace_tasks(self, tasks: list[Task], now: datetime) -> None:
         rows = []
         for task in tasks:
-            category, _seconds_diff = classify_deadline(task.deadline, now)
+            if task.is_completed:
+                category_value = "completed"
+                remaining_text = "已完成"
+            else:
+                category, _seconds_diff = classify_deadline(task.deadline, now)
+                category_value = category.value
+                remaining_text = format_remaining_time(task.deadline, now)
             rows.append(
                 {
                     self.TaskIdRole: task.id,
                     self.TitleRole: task.title,
                     self.DescriptionRole: task.description or "",
                     self.DeadlineTextRole: task.deadline.strftime("%Y-%m-%d %H:%M"),
-                    self.RemainingTextRole: format_remaining_time(task.deadline, now),
-                    self.CategoryRole: category.value,
+                    self.RemainingTextRole: remaining_text,
+                    self.CategoryRole: category_value,
                     self.CompletedRole: task.is_completed,
                 }
             )

@@ -8,10 +8,11 @@ Dialog {
     id: dialog
     objectName: "confirmDialog"
     parent: Overlay.overlay
-    anchors.centerIn: parent
-    width: 430
+    x: Math.round((parent.width - width) / 2)
+    y: Math.round((parent.height - height) / 2)
+    width: Math.min(430, parent.width - 48)
     modal: true
-    padding: 0
+    padding: 26
     property string heading: "请确认"
     property string message: ""
     property string confirmText: "确认"
@@ -34,7 +35,6 @@ Dialog {
     }
     contentItem: ColumnLayout {
         spacing: 18
-        anchors.margins: 26
         Text {
             text: dialog.heading
             color: App.Theme.textPrimary

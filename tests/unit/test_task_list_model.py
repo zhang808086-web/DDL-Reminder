@@ -61,5 +61,7 @@ def test_task_list_model_preserves_supplied_order_and_completed_state():
     assert model.data(model.index(0, 0), title_role) == "Later"
     assert model.data(model.index(1, 0), title_role) == "Completed"
     assert model.data(model.index(1, 0), completed_role) is True
-    assert model.data(model.index(1, 0), remaining_role) == "已逾期1小时"
+    category_role = _role(model, b"category")
+    assert model.data(model.index(1, 0), remaining_role) == "已完成"
+    assert model.data(model.index(1, 0), category_role) == "completed"
     assert model.data(model.index(0, 0), Qt.DisplayRole) is None

@@ -138,6 +138,8 @@ v0.2.0 将主窗口、悬浮窗和全部对话框从 Qt Widgets 迁移到 Qt Qui
 
 v0.2.0 migrated the main window, floating window, and every dialog from Qt Widgets to Qt Quick/QML. The Python domain layer, application services, SQLAlchemy repository, SQLite schema, reminder rules, and Windows integrations remain unchanged.
 
+v0.2.1 corrects task-card status semantics and QML popup geometry. Completed tasks use a dedicated presentation category, while the database and domain model remain unchanged.
+
 迁移新增 `TaskListModel`、`AppController` 和 `FloatingWindowController` 作为 QML 与既有业务层之间的窄桥接层。真实 QML 截图使用内存 repository 和合成任务生成，不接触生产数据。
 
 The migration added `TaskListModel`, `AppController`, and `FloatingWindowController` as a narrow bridge between QML and the existing business layer. Real QML screenshots are generated with an in-memory repository and synthetic tasks without touching production data.

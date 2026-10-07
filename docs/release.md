@@ -1,5 +1,31 @@
 # 发布说明 / Release Notes
 
+## v0.2.1
+
+Qt Quick/QML 界面修复版本，不增加新业务功能，也不改变数据库结构。
+
+Qt Quick/QML interface correction release with no new business features and no database schema changes.
+
+### Fixed
+
+- 已完成任务卡片统一显示绿色“已完成”，不再显示逾期或剩余时间。
+- 已完成任务卡片移除重复的完成勾选按钮，恢复操作保留在任务详情中。
+- 主窗口任务卡、悬浮窗卡片和详情信息卡统一间距、边框与视觉层级。
+- 任务编辑、任务详情、设置和确认弹窗使用可靠的居中定位与内容内边距。
+- 主窗口侧栏固定为稳定宽度，防止布局压缩。
+
+- Completed task cards now show a green Completed state instead of overdue or remaining time.
+- Removed the redundant completion checkbox from completed cards; restore remains available in task details.
+- Aligned spacing, borders, and hierarchy across main, floating, and detail cards.
+- Correctly centered all dialogs and applied real content padding.
+- Locked the sidebar to a stable width to prevent layout compression.
+
+### Verification
+
+- 117 automated tests pass.
+- Real QML screenshots cover active cards, completed cards, floating cards, and completed-task details.
+- The SQLite schema and `%APPDATA%/DDL-Reminder/tasks.db` location are unchanged.
+
 ## v0.2.0
 
 Qt Quick/QML 全界面迁移版本，同时保留现有 Python 业务逻辑和本地数据。

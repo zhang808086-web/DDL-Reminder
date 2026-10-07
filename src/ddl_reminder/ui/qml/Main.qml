@@ -52,6 +52,8 @@ ApplicationWindow {
                 id: sidebar
                 objectName: "sidebar"
                 Layout.preferredWidth: 238
+                Layout.minimumWidth: 238
+                Layout.maximumWidth: 238
                 Layout.fillHeight: true
                 color: App.Theme.surface
                 radius: 15
@@ -232,7 +234,9 @@ ApplicationWindow {
                                         font.weight: Font.Bold
                                     }
                                     Text {
-                                        text: appController.sectionCount + " 项任务 · 按截止时间排列"
+                                        text: appController.sectionCount + " 项任务 · "
+                                              + (appController.currentFilter === "completed"
+                                                 ? "按原截止时间排列" : "按截止时间排列")
                                         color: App.Theme.textMuted
                                         font.family: App.Theme.fontFamily
                                         font.pixelSize: 12

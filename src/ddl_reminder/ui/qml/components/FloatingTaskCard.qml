@@ -4,6 +4,7 @@ import ".." as App
 
 Rectangle {
     id: card
+    objectName: "floatingTaskCard"
     required property int taskId
     required property string title
     required property string remainingText
@@ -11,18 +12,29 @@ Rectangle {
     signal openRequested(int taskId)
     signal completeRequested(int taskId)
 
-    implicitHeight: 88
+    implicitHeight: 82
     radius: App.Theme.radiusMedium
     color: hoverArea.containsMouse ? App.Theme.surfaceHover : App.Theme.surfaceRaised
     border.color: App.Theme.borderSoft
+    border.width: 1
+
+    Rectangle {
+        width: 3
+        height: parent.height - 24
+        anchors.left: parent.left
+        anchors.leftMargin: 1
+        anchors.verticalCenter: parent.verticalCenter
+        radius: 2
+        color: status.tone
+    }
 
     Column {
         anchors.left: parent.left
-        anchors.leftMargin: 16
+        anchors.leftMargin: 18
         anchors.right: completeButton.left
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 9
+        spacing: 7
         Text {
             width: parent.width
             text: card.title
@@ -32,7 +44,7 @@ Rectangle {
             font.pixelSize: 14
             font.weight: Font.DemiBold
         }
-        StatusChip { category: card.category; label: card.remainingText }
+        StatusChip { id: status; category: card.category; label: card.remainingText }
     }
 
     Button {

@@ -10,6 +10,14 @@ DDL Reminder 是一个 Windows 桌面 DDL 提醒工具，用来让重要截止�
 
 ![Main Window](docs/screenshots/main-window.png)
 
+### 已完成任务
+
+![Completed Tasks](docs/screenshots/completed-tasks.png)
+
+### 已完成任务详情
+
+![Completed Task Detail](docs/screenshots/completed-task-detail.png)
+
 ### 悬浮窗
 
 ![Floating Window](docs/screenshots/floating-window.png)
@@ -130,7 +138,7 @@ dist/DDL-Reminder/DDL-Reminder.exe
 
 ## 当前状态
 
-v0.2.0 使用 Qt Quick/QML 重构了全部应用界面，同时保留原有 Python 业务层、SQLite 数据结构和 Windows 集成。
+v0.2.1 修正了 QML 卡片与弹窗排版，并让已完成任务统一显示“已完成”，不再显示逾期或剩余时间。Python 业务层、SQLite 数据结构和 Windows 集成保持不变。
 
 已完成：
 
@@ -168,6 +176,14 @@ It combines a task list, a lightweight floating window, Windows notifications, s
 ### Main Window
 
 ![Main Window](docs/screenshots/main-window.png)
+
+### Completed Tasks
+
+![Completed Tasks](docs/screenshots/completed-tasks.png)
+
+### Completed Task Detail
+
+![Completed Task Detail](docs/screenshots/completed-task-detail.png)
 
 ### Floating Window
 
@@ -303,7 +319,7 @@ Original process documents are kept under [docs/archive](docs/archive/).
 
 ## Current Status
 
-v0.2.0 migrates every application surface to Qt Quick/QML while retaining the Python business layer, SQLite schema, and Windows integrations.
+v0.2.1 fixes QML card and dialog layout and ensures completed tasks show a single completed status instead of overdue or remaining time. The Python business layer, SQLite schema, and Windows integrations remain unchanged.
 
 Completed:
 

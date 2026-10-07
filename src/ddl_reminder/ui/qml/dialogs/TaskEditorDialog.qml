@@ -8,11 +8,12 @@ Dialog {
     id: dialog
     objectName: "taskEditorDialog"
     parent: Overlay.overlay
-    anchors.centerIn: parent
-    width: 520
+    x: Math.round((parent.width - width) / 2)
+    y: Math.round((parent.height - height) / 2)
+    width: Math.min(520, parent.width - 48)
     modal: true
     closePolicy: Popup.CloseOnEscape
-    padding: 0
+    padding: 26
     property int taskId: -1
     property bool editing: false
 
@@ -59,7 +60,6 @@ Dialog {
     }
     contentItem: ColumnLayout {
         spacing: 18
-        anchors.margins: 26
 
         RowLayout {
             Layout.fillWidth: true

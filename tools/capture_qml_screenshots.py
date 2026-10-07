@@ -49,6 +49,7 @@ def add_tasks(service: TaskService) -> list[int]:
             now=NOW,
         )
         task_ids.append(task.id)
+    service.complete_task(task_ids[-1], NOW)
     return task_ids
 
 
@@ -97,6 +98,16 @@ def main() -> int:
     root.showMainWindow()
     settle(application)
     save_window(root, "main-window.png")
+
+    controller.setFilter("completed")
+    settle(application)
+    save_window(root, "completed-tasks.png")
+    root.openTaskDetails(task_ids[-1])
+    settle(application)
+    save_window(root, "completed-task-detail.png")
+    detail.setProperty("visible", False)
+    controller.setFilter("active")
+    settle(application)
 
     root.showFloatingWindow()
     settle(application)

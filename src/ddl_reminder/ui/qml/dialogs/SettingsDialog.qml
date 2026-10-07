@@ -8,10 +8,11 @@ Dialog {
     id: dialog
     objectName: "settingsDialog"
     parent: Overlay.overlay
-    anchors.centerIn: parent
-    width: 470
+    x: Math.round((parent.width - width) / 2)
+    y: Math.round((parent.height - height) / 2)
+    width: Math.min(470, parent.width - 48)
     modal: true
-    padding: 0
+    padding: 26
 
     function showSettings() { open() }
 
@@ -22,7 +23,6 @@ Dialog {
     }
     contentItem: ColumnLayout {
         spacing: 20
-        anchors.margins: 26
         RowLayout {
             Layout.fillWidth: true
             Text {

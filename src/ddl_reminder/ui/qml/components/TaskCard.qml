@@ -4,6 +4,7 @@ import ".." as App
 
 Rectangle {
     id: card
+    objectName: "taskCard"
     required property int taskId
     required property string title
     required property string description
@@ -14,7 +15,7 @@ Rectangle {
     signal openRequested(int taskId)
     signal completeRequested(int taskId)
 
-    implicitHeight: description.length > 0 ? 126 : 106
+    implicitHeight: description.length > 0 ? 112 : 94
     radius: App.Theme.radiusLarge
     color: mouseArea.containsMouse ? App.Theme.surfaceHover : App.Theme.surfaceRaised
     border.color: mouseArea.containsMouse ? "#38527A" : App.Theme.borderSoft
@@ -22,21 +23,21 @@ Rectangle {
 
     Rectangle {
         width: 3
-        height: parent.height - 34
+        height: parent.height - 28
         anchors.left: parent.left
         anchors.leftMargin: 1
         anchors.verticalCenter: parent.verticalCenter
         radius: 2
-        color: status.tone
+        color: card.completed ? App.Theme.success : status.tone
     }
 
     Column {
         anchors.left: parent.left
-        anchors.leftMargin: 22
+        anchors.leftMargin: 20
         anchors.right: status.left
         anchors.rightMargin: 18
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 7
+        spacing: 6
         Text {
             width: parent.width
             text: card.title
@@ -65,8 +66,9 @@ Rectangle {
 
     StatusChip {
         id: status
-        anchors.right: completeBox.left
-        anchors.rightMargin: 14
+        objectName: "taskStatusChip"
+        anchors.right: card.completed ? parent.right : completeBox.left
+        anchors.rightMargin: card.completed ? 18 : 14
         anchors.verticalCenter: parent.verticalCenter
         category: card.category
         label: card.remainingText
@@ -74,11 +76,12 @@ Rectangle {
 
     CheckBox {
         id: completeBox
+        objectName: "completionAction"
         anchors.right: parent.right
         anchors.rightMargin: 18
         anchors.verticalCenter: parent.verticalCenter
         checked: card.completed
-        enabled: !card.completed
+        visible: !card.completed
         width: 34
         height: 34
         indicator: Rectangle {
@@ -103,7 +106,7 @@ Rectangle {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        anchors.rightMargin: 58
+        anchors.rightMargin: card.completed ? 0 : 58
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         onClicked: card.openRequested(card.taskId)

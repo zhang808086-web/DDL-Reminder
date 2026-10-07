@@ -5,7 +5,8 @@ Rectangle {
     id: chip
     property string category: "normal"
     property string label: ""
-    readonly property color tone: category === "overdue" ? App.Theme.danger
+    readonly property color tone: category === "completed" ? App.Theme.success
+                                  : category === "overdue" ? App.Theme.danger
                                   : category === "within_one_hour" ? "#FF8E66"
                                   : category === "within_one_day" ? App.Theme.warning
                                   : App.Theme.cyan

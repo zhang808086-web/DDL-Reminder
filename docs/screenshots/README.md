@@ -5,6 +5,8 @@ README 引用了以下截图文件：
 The root README references these screenshot files:
 
 - `main-window.png`
+- `completed-tasks.png`
+- `completed-task-detail.png`
 - `floating-window.png`
 - `task-detail-dialog.png`
 
