@@ -161,6 +161,7 @@ def create_application_runtime(
 
     reminder_timer = QTimer()
     reminder_timer.timeout.connect(reminder_runner.run_once)
+    reminder_timer.timeout.connect(controller.refreshTasks)
     reminder_timer.start(30_000)
 
     runtime = ApplicationRuntime(

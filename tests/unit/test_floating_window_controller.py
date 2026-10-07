@@ -1,4 +1,4 @@
-from PySide6.QtCore import QObject, QPoint, QRect, QSize
+from PySide6.QtCore import QEvent, QObject, QPoint, QRect, QSize
 
 from ddl_reminder.ui.floating_window_controller import (
     clamp_position,
@@ -163,3 +163,16 @@ def test_collapsed_position_is_not_persisted():
     controller.savePosition()
 
     assert settings.values["floating_window/pos"] == QPoint(100, 180)
+
+
+def test_native_drag_release_finishes_snap_even_if_qml_release_is_not_delivered():
+    window = FakeWindow(QPoint(150, 180))
+    controller = make_controller()
+    controller.attachWindow(window)
+    controller.beginDrag()
+    window.setPosition(QPoint(124, 180))
+
+    controller.eventFilter(window, QEvent(QEvent.Type.MouseButtonRelease))
+
+    assert controller.dockSide == "left"
+    assert window.position() == QPoint(100, 180)

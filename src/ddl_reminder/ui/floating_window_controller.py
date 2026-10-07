@@ -238,6 +238,8 @@ class FloatingWindowController(QObject):
         elif event.type() == QEvent.Type.Move and not self._collapsed:
             self._update_dock_side(self._dock_threshold)
             self.savePosition()
+        elif event.type() == QEvent.Type.MouseButtonRelease and self._dragging:
+            self.finishDrag()
         elif event.type() == QEvent.Type.Close:
             self.savePosition()
             if not self._allow_close:

@@ -40,6 +40,8 @@ ColumnLayout {
             border.width: 1
         }
         onTextChanged: {
+            if (!field.multiline && (text.indexOf("\n") >= 0 || text.indexOf("\r") >= 0))
+                text = text.replace(/[\r\n]+/g, "")
             if (text.length > field.maximumLength)
                 text = text.slice(0, field.maximumLength)
         }

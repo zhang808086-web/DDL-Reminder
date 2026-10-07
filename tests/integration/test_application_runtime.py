@@ -80,6 +80,12 @@ def test_runtime_loads_qml_wires_tray_refresh_and_quit():
     runtime.controller.tasksChanged.emit()
     assert runner.calls == 2
 
+    view_refreshes = []
+    runtime.controller.viewStateChanged.connect(lambda: view_refreshes.append(True))
+    runtime.reminder_timer.timeout.emit()
+    assert view_refreshes == [True]
+    assert runner.calls == 3
+
     runtime.quit_action.trigger()
     application.processEvents()
     assert runtime.root.property("visible") is False
