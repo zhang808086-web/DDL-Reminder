@@ -11,8 +11,13 @@ a = Analysis(
     binaries=[],
     datas=[
         ("src\\ddl_reminder\\ui\\assets", "ddl_reminder\\ui\\assets"),
+        ("src\\ddl_reminder\\ui\\qml", "ddl_reminder\\ui\\qml"),
     ],
-    hiddenimports=[],
+    hiddenimports=[
+        "PySide6.QtQml",
+        "PySide6.QtQuick",
+        "PySide6.QtQuickControls2",
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
