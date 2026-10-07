@@ -1,5 +1,6 @@
 .venv/
 .vscode/
+.worktrees/
 
 __pycache__/
 **/__pycache__/
