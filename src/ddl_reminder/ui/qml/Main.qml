@@ -3,6 +3,7 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import "." as App
 import "components"
+import "dialogs"
 
 ApplicationWindow {
     id: root
@@ -23,12 +24,17 @@ ApplicationWindow {
     }
 
     function showFloatingWindow() {
-        // FloatingWindow.qml is composed in the next migration task.
+        floatingWindow.showWindow()
     }
 
     function prepareToQuit() {
+        floatingWindow.prepareToQuit()
         root.hide()
     }
+
+    function openCreateDialog() { taskEditor.openForCreate() }
+    function openTaskDetails(taskId) { taskDetail.openForTask(taskId) }
+    function openSettings() { settingsDialog.showSettings() }
 
     Rectangle {
         anchors.fill: parent
@@ -132,6 +138,13 @@ ApplicationWindow {
 
                     Item { Layout.fillHeight: true }
 
+                    NavigationButton {
+                        Layout.fillWidth: true
+                        text: "设置"
+                        iconText: "⚙"
+                        onSelectedRequested: root.openSettings()
+                    }
+
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 74
@@ -230,6 +243,7 @@ ApplicationWindow {
                                     objectName: "createTaskButton"
                                     text: "+  新建任务"
                                     primary: true
+                                    onClicked: root.openCreateDialog()
                                 }
                             }
 
@@ -269,13 +283,7 @@ ApplicationWindow {
 
                                 delegate: TaskCard {
                                     width: taskList.width - (taskList.ScrollBar.vertical.visible ? 12 : 0)
-                                    taskId: model.taskId
-                                    title: model.title
-                                    description: model.description
-                                    deadlineText: model.deadlineText
-                                    remainingText: model.remainingText
-                                    category: model.category
-                                    completed: model.completed
+                                    onOpenRequested: root.openTaskDetails(taskId)
                                     onCompleteRequested: appController.completeTask(taskId)
                                 }
 
@@ -294,6 +302,37 @@ ApplicationWindow {
                     }
                 }
             }
+        }
+    }
+
+    TaskEditorDialog { id: taskEditor }
+    TaskDetailDialog {
+        id: taskDetail
+        onEditRequested: function(details) { taskEditor.openForTask(details) }
+        onDeleteRequested: function(taskId, taskTitle) {
+            confirmDialog.ask(
+                "删除任务",
+                "确定永久删除“" + taskTitle + "”吗？此操作无法撤销。",
+                "删除",
+                true,
+                function() {
+                    if (appController.deleteTask(taskId))
+                        taskDetail.close()
+                }
+            )
+        }
+    }
+    SettingsDialog { id: settingsDialog }
+    ConfirmDialog { id: confirmDialog }
+    FloatingWindow {
+        id: floatingWindow
+        onTaskOpenRequested: function(taskId) { root.openTaskDetails(taskId) }
+    }
+
+    Connections {
+        target: appController
+        function onErrorRequested(title, message) {
+            confirmDialog.ask(title, message, "知道了", false, null)
         }
     }
 }

@@ -219,6 +219,7 @@ class FloatingWindowController(QObject):
             self.savePosition()
             self._window.hide()
 
+    @Slot()
     def allowClose(self) -> None:
         self._allow_close = True
 
