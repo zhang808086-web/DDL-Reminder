@@ -22,6 +22,7 @@ Use this checklist before creating a release build.
 - 最多显示三个紧急未完成任务 / Shows at most three urgent active tasks
 - 显示剩余时间或逾期时间 / Displays remaining time or overdue time
 - 点击任务打开任务详情 / Clicking a task opens task detail
+- 点击悬浮窗勾选按钮可直接完成任务 / The floating-window check button completes a task directly
 - 从悬浮窗编辑任务后主窗口立即刷新 / Editing from the floating window refreshes the main window immediately
 - 从主窗口完成、恢复、删除任务后悬浮窗立即刷新 / Completing, restoring, or deleting from the main window refreshes the floating window immediately
 - 定时刷新会更新剩余时间 / Timer refresh updates remaining time
@@ -63,3 +64,5 @@ Use this checklist before creating a release build.
 - 不出现开发用终端窗口 / No development-only terminal window appears
 - 新环境启动时数据库为空 / Fresh install starts with an empty database
 - 重新打包不会覆盖已有 AppData 数据库 / Existing AppData database is not overwritten by rebuilding the exe
+- 所有 QML 窗口和对话框均可加载且无 import 错误 / Every QML window and dialog loads without import errors
+- 覆盖安装前后 `tasks.db` 哈希不变且完整性检查通过 / `tasks.db` hash remains unchanged across upgrade and passes integrity check

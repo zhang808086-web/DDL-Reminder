@@ -35,7 +35,7 @@ DDL Reminder 是一个 Windows 桌面 DDL 提醒工具，用来让重要截止�
 ## 技术栈
 
 - Python 3.11+
-- PySide6
+- PySide6 + Qt Quick/QML
 - SQLAlchemy
 - SQLite
 - PyInstaller
@@ -49,7 +49,7 @@ src/ddl_reminder/
   domain/             # 领域模型和时间规则
   infrastructure/     # SQLite、通知、自启等
   ports/              # 接口定义
-  ui/                 # PySide6 界面
+  ui/                 # QML 界面与 Python 控制器
   main.py             # 程序入口
 tests/
   unit/
@@ -130,7 +130,7 @@ dist/DDL-Reminder/DDL-Reminder.exe
 
 ## 当前状态
 
-v0.1.4 是一个可安装的本地 Windows 桌面版本。
+v0.2.0 使用 Qt Quick/QML 重构了全部应用界面，同时保留原有 Python 业务层、SQLite 数据结构和 Windows 集成。
 
 已完成：
 
@@ -145,12 +145,11 @@ v0.1.4 是一个可安装的本地 Windows 桌面版本。
 - PyInstaller 打包
 - 自定义应用图标
 - Inno Setup 安装器
+- 深色科技风 Qt Quick/QML 界面
+- 悬浮窗直接完成任务
+- 主窗口按截止时间与创建时间稳定排序
 
-后续可能改进：
-
-- 添加数据库迁移支持
-- 继续打磨 UI 细节
-- 支持可配置提醒间隔
+升级安装不会修改 `%APPDATA%/DDL-Reminder/tasks.db`。
 
 ## License
 
@@ -197,7 +196,7 @@ It combines a task list, a lightweight floating window, Windows notifications, s
 ## Tech Stack
 
 - Python 3.11+
-- PySide6
+- PySide6 + Qt Quick/QML
 - SQLAlchemy
 - SQLite
 - PyInstaller
@@ -211,7 +210,7 @@ src/ddl_reminder/
   domain/             # Domain model and deadline rules
   infrastructure/     # SQLite, notifier, autostart, etc.
   ports/              # Interfaces
-  ui/                 # PySide6 UI
+  ui/                 # QML UI and Python presentation controllers
   main.py             # App entry point
 tests/
   unit/
@@ -304,7 +303,7 @@ Original process documents are kept under [docs/archive](docs/archive/).
 
 ## Current Status
 
-v0.1.4 is an installable local Windows desktop version.
+v0.2.0 migrates every application surface to Qt Quick/QML while retaining the Python business layer, SQLite schema, and Windows integrations.
 
 Completed:
 
@@ -319,13 +318,11 @@ Completed:
 - PyInstaller packaging
 - Custom app icon
 - Inno Setup installer
-- Task creation dialog matches the task detail glass style
+- Dark technology-style Qt Quick/QML interface
+- Direct completion from the floating window
+- Stable deadline/creation-time ordering in the main window
 
-Next possible improvements:
-
-- Add database migration support
-- Polish UI details
-- Add configurable reminder intervals
+Upgrade installs leave `%APPDATA%/DDL-Reminder/tasks.db` unchanged.
 
 ## License
 

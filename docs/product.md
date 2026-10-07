@@ -32,18 +32,18 @@ The app is intentionally local-first. It does not require accounts, cloud sync, 
 
 ## 当前范围 / Current Scope
 
-v0.1.0 聚焦于一个可用的单用户 Windows 桌面应用：
+v0.2.0 聚焦于一个可用的单用户 Windows 桌面应用：
 
-v0.1.0 focuses on a usable single-user Windows desktop app:
+v0.2.0 focuses on a usable single-user Windows desktop app:
 
 - 本地 SQLite 存储 / Local SQLite storage
-- PySide6 桌面界面 / PySide6 desktop UI
+- PySide6 + Qt Quick/QML 桌面界面 / PySide6 + Qt Quick/QML desktop UI
 - 系统托盘集成 / System tray integration
 - 桌面悬浮提醒窗 / Floating reminder window
 - DDL 分类和提醒规则 / Deadline classification and reminder rules
 - PyInstaller 打包 / PyInstaller packaging
 
-## v0.1.0 不包含 / Out Of Scope For v0.1.0
+## v0.2.0 不包含 / Out Of Scope For v0.2.0
 
 - 用户账号 / User accounts
 - 云同步 / Cloud sync

@@ -79,6 +79,24 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         checked: card.completed
         enabled: !card.completed
+        width: 34
+        height: 34
+        indicator: Rectangle {
+            anchors.centerIn: parent
+            width: 30
+            height: 30
+            radius: 15
+            color: completeBox.hovered ? "#173F38" : "#102B29"
+            border.color: "#275D50"
+            Text {
+                anchors.centerIn: parent
+                text: "✓"
+                color: App.Theme.success
+                font.pixelSize: 15
+                font.bold: true
+            }
+        }
+        contentItem: Item {}
         onClicked: card.completeRequested(card.taskId)
     }
 

@@ -1,5 +1,5 @@
 #define MyAppName "DDL Reminder"
-#define MyAppVersion "0.1.4"
+#define MyAppVersion "0.2.0"
 #define MyAppPublisher "DDL Reminder"
 #define MyAppExeName "DDL-Reminder.exe"
 

@@ -132,6 +132,16 @@ The app was packaged with PyInstaller and moved runtime data to AppData:
 - `.gitignore` 忽略构建产物 / build artifacts ignored in `.gitignore`
 - README 和 docs 为 GitHub 发布整理 / README and docs prepared for GitHub
 
+## Phase 9：Qt Quick/QML 全界面迁移 / Full Qt Quick/QML Migration
+
+v0.2.0 将主窗口、悬浮窗和全部对话框从 Qt Widgets 迁移到 Qt Quick/QML。Python 领域层、应用服务、SQLAlchemy repository、SQLite schema、提醒规则和 Windows 集成都保持不变。
+
+v0.2.0 migrated the main window, floating window, and every dialog from Qt Widgets to Qt Quick/QML. The Python domain layer, application services, SQLAlchemy repository, SQLite schema, reminder rules, and Windows integrations remain unchanged.
+
+迁移新增 `TaskListModel`、`AppController` 和 `FloatingWindowController` 作为 QML 与既有业务层之间的窄桥接层。真实 QML 截图使用内存 repository 和合成任务生成，不接触生产数据。
+
+The migration added `TaskListModel`, `AppController`, and `FloatingWindowController` as a narrow bridge between QML and the existing business layer. Real QML screenshots are generated with an in-memory repository and synthetic tasks without touching production data.
+
 ## 练习内容 / What This Project Practiced
 
 - 分层架构 / Layered architecture
@@ -139,6 +149,7 @@ The app was packaged with PyInstaller and moved runtime data to AppData:
 - Repository pattern
 - 不过度设计的领域边界 / Domain-driven boundaries without overengineering
 - PySide6 UI development
+- Qt Quick/QML component design and Python model/controller bridging
 - SQLAlchemy persistence
 - Windows desktop integration
 - PyInstaller packaging

@@ -1,5 +1,31 @@
 # 发布说明 / Release Notes
 
+## v0.2.0
+
+Qt Quick/QML 全界面迁移版本，同时保留现有 Python 业务逻辑和本地数据。
+
+Full Qt Quick/QML interface migration while preserving the existing Python business logic and local data.
+
+### Changed
+
+- 主窗口、悬浮窗、任务编辑、任务详情、设置和确认界面全部迁移到 QML。
+- 新增深海军蓝、青色与紫色组成的现代科技风主题和共享组件。
+- 主窗口继续按 `(deadline, created_at)` 排序；悬浮窗继续显示最早的三个未完成任务，并可直接勾选完成。
+- 运行入口改用 `QQmlApplicationEngine`，系统托盘仍使用原生 Windows/Qt 菜单。
+- 数据库仍位于 `%APPDATA%/DDL-Reminder/tasks.db`，schema 未改变。
+
+- Migrated the main window, floating window, editor, detail, settings, and confirmation surfaces to QML.
+- Added a deep-navy, cyan, and violet technology-style theme with shared components.
+- Retained `(deadline, created_at)` ordering and the three-item floating list with direct completion.
+- Switched runtime composition to `QQmlApplicationEngine`; the system tray keeps its native Qt menu.
+- Kept the database at `%APPDATA%/DDL-Reminder/tasks.db` with no schema change.
+
+### Verification
+
+- Real screenshots are generated from the QML application with synthetic in-memory data.
+- The automated suite includes QML loading, runtime composition, controller, model, and floating geometry coverage.
+- The upgrade procedure backs up and hashes the production database before installation.
+
 ## v0.1.4
 
 Windows packaging fix release.

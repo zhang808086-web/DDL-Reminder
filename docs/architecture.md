@@ -12,7 +12,7 @@ src/ddl_reminder/
   ports/           # Repository 和 Notifier 接口 / Repository and notifier interfaces
   application/     # 用例服务 / Use case services
   infrastructure/  # SQLite、SQLAlchemy、通知、自启 / SQLite, SQLAlchemy, notification, autostart
-  ui/              # PySide6 窗口和对话框 / PySide6 windows and dialogs
+  ui/              # QML 视图与 Python 展示控制器 / QML views and Python presentation controllers
   main.py          # 组合根 / Composition root
 ```
 
@@ -91,24 +91,24 @@ The production database is stored under:
 
 ## UI 层 / UI
 
-UI 层使用 PySide6 实现。
+UI 层使用 PySide6 的 Qt Quick/QML 实现，所有应用窗口和对话框均由 QML 渲染。
 
-The UI layer is built with PySide6.
+The UI layer uses PySide6 Qt Quick/QML. Every application window and dialog is rendered by QML.
 
 主要界面：
 
 Main UI pieces:
 
-- `MainWindow`：任务列表、筛选、任务操作、设置入口 / task list, filters, task actions, settings entry
-- `TaskDialog`：创建任务 / create task
-- `TaskDetailDialog`：查看和更新任务详情 / view and update task details
-- `FloatingWindow`：置顶紧急任务悬浮窗 / always-on-top urgent task window
-- `TaskCard`：悬浮窗中的任务卡片 / compact floating-window task item
-- `SettingsDialog`：设置页，目前包含开机自启 / app settings, currently including autostart
+- `AppController`：把 `TaskService` 查询、命令和错误转换成 QML 属性、模型、信号与槽 / adapts task queries, commands, and errors for QML
+- `TaskListModel`：向主窗口和悬浮窗提供稳定排序的角色数据 / provides ordered role data to both task views
+- `FloatingWindowController`：处理位置保存、贴边、收起、固定与托盘恢复 / owns position persistence, snapping, collapse, pinning, and tray restore
+- `Main.qml`：主窗口组合根 / main-window composition root
+- `FloatingWindow.qml` 与 `dialogs/`：悬浮窗以及所有应用对话框 / floating window and all app dialogs
+- `components/` 与 `Theme.qml`：共享视觉组件与深色科技主题 / shared visual components and dark technology theme
 
-UI 之间通过信号同步状态。例如，从悬浮窗更新任务后，会通过 `tasks_changed` 信号刷新主窗口。
+任务变更统一经过 `AppController`，成功后在同一次刷新中重建主窗口与悬浮窗模型。
 
-UI changes emit signals so related windows refresh immediately. For example, when a task is updated from the floating window, the main window refreshes through a `tasks_changed` signal.
+All task mutations pass through `AppController`; after success, both main and floating models are rebuilt in the same refresh.
 
 ## 组合根 / Composition Root
 
@@ -117,11 +117,11 @@ UI changes emit signals so related windows refresh immediately. For example, whe
 `main.py` wires everything together:
 
 - 创建 `QApplication` / Creates `QApplication`
-- 应用字体和主题 / Applies font and theme setup
+- 创建 `QQmlApplicationEngine` 并加载 `Main.qml` / Creates `QQmlApplicationEngine` and loads `Main.qml`
 - 获取单实例锁 / Acquires single-instance lock
 - 初始化 SQLite / Initializes SQLite
 - 创建 repository 和 services / Creates repository and services
-- 创建主窗口和悬浮窗 / Creates main window and floating window
+- 注入 Python 控制器并保留运行期对象 / Exposes Python controllers and retains runtime objects
 - 创建托盘图标和菜单 / Creates tray icon and menu
 - 启动提醒定时器 / Starts reminder timer
 - 根据普通启动或开机自启决定显示行为 / Decides startup behavior for normal launch vs autostart launch
@@ -138,7 +138,8 @@ The test suite includes:
 - SQLAlchemy repository 集成测试 / SQLAlchemy repository integration tests
 - 提醒运行器测试 / Reminder runner tests
 - 使用 fake registry 的开机自启测试 / Autostart tests with fake registry behavior
-- 悬浮窗信号同步回归测试 / Floating window signal regression test
+- QML 无警告加载和应用组合测试 / Warning-free QML loading and application composition tests
+- 悬浮窗几何与生命周期测试 / Floating geometry and lifecycle tests
 
 测试命令：
 
