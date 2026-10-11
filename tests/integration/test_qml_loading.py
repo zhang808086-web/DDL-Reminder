@@ -3,7 +3,7 @@ from datetime import date, datetime, time
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from PySide6.QtCore import QObject, QPoint, QRect, QMetaObject
+from PySide6.QtCore import QObject, QPoint, QRect, QMetaObject, Qt
 from PySide6.QtTest import QTest
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuick import QQuickItem
@@ -140,5 +140,27 @@ def test_main_qml_loads_with_required_shell_objects_and_root_api():
     assert QMetaObject.invokeMethod(root, "showFloatingWindow")
     application.processEvents()
     assert objects["floatingWindow"].property("visible") is True
+
+    drag_starts = (
+        QPoint(230, 46),  # pin button
+        QPoint(275, 46),  # close button
+        QPoint(275, 130),  # task completion button
+        QPoint(150, 250),  # empty surface below the cards
+    )
+    observed_dragging = []
+    for start in drag_starts:
+        QTest.mousePress(objects["floatingWindow"], Qt.LeftButton, Qt.NoModifier, start)
+        QTest.mouseMove(objects["floatingWindow"], start + QPoint(-45, 45), 30)
+        application.processEvents()
+        observed_dragging.append(floating_controller.property("dragging"))
+        QTest.mouseRelease(
+            objects["floatingWindow"],
+            Qt.LeftButton,
+            Qt.NoModifier,
+            start + QPoint(-45, 45),
+        )
+        application.processEvents()
+
+    assert observed_dragging == [True, True, True, True]
     objects["floatingWindow"].setProperty("visible", False)
     root.close()

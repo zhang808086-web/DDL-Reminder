@@ -176,3 +176,16 @@ def test_native_drag_release_finishes_snap_even_if_qml_release_is_not_delivered(
 
     assert controller.dockSide == "left"
     assert window.position() == QPoint(100, 180)
+
+
+def test_dragging_property_tracks_the_full_drag_lifecycle():
+    controller = make_controller()
+    controller.attachWindow(FakeWindow())
+
+    assert controller.property("dragging") is False
+
+    controller.beginDrag()
+    assert controller.property("dragging") is True
+
+    controller.finishDrag()
+    assert controller.property("dragging") is False

@@ -88,6 +88,7 @@ class FloatingWindowController(QObject):
     pinnedChanged = Signal()
     collapsedChanged = Signal()
     dockSideChanged = Signal()
+    draggingChanged = Signal()
 
     def __init__(
         self,
@@ -122,6 +123,10 @@ class FloatingWindowController(QObject):
     @Property(str, notify=dockSideChanged)
     def dockSide(self) -> str:
         return self._dock_side or ""
+
+    @Property(bool, notify=draggingChanged)
+    def dragging(self) -> bool:
+        return self._dragging
 
     @Slot(QObject)
     def attachWindow(self, window: QObject) -> None:
@@ -171,13 +176,17 @@ class FloatingWindowController(QObject):
 
     @Slot()
     def beginDrag(self) -> None:
-        self._dragging = True
+        if not self._dragging:
+            self._dragging = True
+            self.draggingChanged.emit()
         if self._collapsed:
             self._expand()
 
     @Slot()
     def finishDrag(self) -> None:
-        self._dragging = False
+        if self._dragging:
+            self._dragging = False
+            self.draggingChanged.emit()
         if self._window is None:
             return
         side = self._nearest_edge(self._snap_threshold)

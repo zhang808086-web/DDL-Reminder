@@ -1,5 +1,29 @@
 # 发布说明 / Release Notes
 
+## v0.2.2
+
+悬浮窗拖动与四边缩入修复版本，不增加业务功能，也不改变数据库结构。
+
+Floating-window drag and four-edge collapse correction release with no new business features and no database schema changes.
+
+### Fixed
+
+- 悬浮窗整个可见区域均可发起拖动，包括固定键、关闭键、任务卡和完成键。
+- 短按仍执行原有按钮操作，移动超过拖动阈值后改为拖动窗口。
+- 拖动期间暂停窗口位置动画，避免动画与原生系统移动竞争。
+- 松开后继续执行左、右、上、下四边吸附、位置保存与自动缩入。
+
+- The entire visible floating window can initiate dragging, including pin, close, task-card, and completion controls.
+- Short clicks retain their original actions; movement beyond the drag threshold moves the window.
+- Position animation is disabled during dragging so it cannot compete with native system movement.
+- Releasing keeps the existing four-edge snap, position persistence, and auto-collapse behavior.
+
+### Verification
+
+- Full-surface pointer tests cover pin, close, completion, and empty surface regions.
+- Geometry tests cover left, right, top, and bottom snapping and collapsed positions.
+- The SQLite schema and `%APPDATA%/DDL-Reminder/tasks.db` location are unchanged.
+
 ## v0.2.1
 
 Qt Quick/QML 界面修复版本，不增加新业务功能，也不改变数据库结构。

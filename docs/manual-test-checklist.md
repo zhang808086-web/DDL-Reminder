@@ -28,6 +28,7 @@ Use this checklist before creating a release build.
 - 定时刷新会更新剩余时间 / Timer refresh updates remaining time
 - 移动后保存位置 / Position is saved after moving
 - 固定按钮会禁用自动收起 / Pin button disables auto-hide
+- 悬浮窗任意可见区域（包括固定、关闭和任务按钮）按住移动都可拖动，短按仍执行原按钮操作 / Dragging from any visible area, including pin, close, and task buttons, moves the window while a short click keeps the original action
 - 未固定时可以贴边吸附 / Unpinned window snaps to screen edges
 - 左、右、上、下四个边缘都能自动收起 / Auto-hide works on left, right, top, and bottom edges
 - 托盘菜单可以重新显示隐藏或收起的悬浮窗 / Tray menu can show the floating window after it is hidden or collapsed

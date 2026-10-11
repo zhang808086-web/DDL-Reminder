@@ -138,7 +138,7 @@ dist/DDL-Reminder/DDL-Reminder.exe
 
 ## 当前状态
 
-v0.2.1 修正了 QML 卡片与弹窗排版，并让已完成任务统一显示“已完成”，不再显示逾期或剩余时间。Python 业务层、SQLite 数据结构和 Windows 集成保持不变。
+v0.2.2 让悬浮窗整个可见区域都支持拖动，并保留左、右、上、下四个屏幕边界的吸附与自动缩入。Python 业务层、SQLite 数据结构和 Windows 集成保持不变。
 
 已完成：
 
@@ -319,7 +319,7 @@ Original process documents are kept under [docs/archive](docs/archive/).
 
 ## Current Status
 
-v0.2.1 fixes QML card and dialog layout and ensures completed tasks show a single completed status instead of overdue or remaining time. The Python business layer, SQLite schema, and Windows integrations remain unchanged.
+v0.2.2 makes the entire visible floating window draggable while preserving snap and auto-collapse behavior on all four screen edges. The Python business layer, SQLite schema, and Windows integrations remain unchanged.
 
 Completed:
 

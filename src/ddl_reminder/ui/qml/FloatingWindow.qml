@@ -24,16 +24,39 @@ Window {
 
     Component.onCompleted: floatingWindowController.attachWindow(root)
 
-    Behavior on x { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
-    Behavior on y { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on x {
+        enabled: !floatingWindowController.dragging
+        NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
+    }
+    Behavior on y {
+        enabled: !floatingWindowController.dragging
+        NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
+    }
 
     Rectangle {
+        id: surface
         anchors.fill: parent
         anchors.margins: 8
         radius: 24
         color: "#F20D1426"
         border.color: floatingWindowController.collapsed ? App.Theme.cyan : App.Theme.border
         border.width: 1
+
+        DragHandler {
+            target: null
+            acceptedButtons: Qt.LeftButton
+            grabPermissions: PointerHandler.CanTakeOverFromAnything
+                             | PointerHandler.ApprovesTakeOverByAnything
+            cursorShape: active ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+            onActiveChanged: {
+                if (active) {
+                    floatingWindowController.beginDrag()
+                    root.startSystemMove()
+                } else if (floatingWindowController.dragging) {
+                    floatingWindowController.finishDrag()
+                }
+            }
+        }
 
         ColumnLayout {
             anchors.fill: parent
@@ -59,15 +82,6 @@ Window {
                         onClicked: floatingWindowController.togglePinned()
                     }
                     WindowButton { text: "×"; onClicked: floatingWindowController.hideWindow() }
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    anchors.rightMargin: 88
-                    onPressed: {
-                        floatingWindowController.beginDrag()
-                        root.startSystemMove()
-                    }
-                    onReleased: floatingWindowController.finishDrag()
                 }
             }
 
