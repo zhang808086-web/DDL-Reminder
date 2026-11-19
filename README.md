@@ -1,5 +1,7 @@
 # DDL Reminder
 
+v0.3.0 新增本机 MCP 服务与新版检测，并精简安装包依赖。见 [Agent 接入与更新说明](docs/agent-and-updates.md)。
+
 DDL Reminder 是一个 Windows 桌面 DDL 提醒工具，用来让重要截止时间始终保持可见。
 
 它把任务列表、轻量悬浮窗、Windows 通知、系统托盘和开机自启整合在一起。目标很简单：让紧急 DDL 不容易被忘记，同时不把应用做成笨重的效率套件。
@@ -39,6 +41,8 @@ DDL Reminder 是一个 Windows 桌面 DDL 提醒工具，用来让重要截止�
 - Windows 开机自启
 - AppData 下的本地 SQLite 存储
 - 使用 PyInstaller 打包 Windows 程序
+- 本机 MCP：支持 Agent 创建与查询任务，随安装包提供独立入口
+- 后台检查 GitHub 最新正式版，支持更新通知与手动检查
 
 ## 技术栈
 
@@ -138,7 +142,7 @@ dist/DDL-Reminder/DDL-Reminder.exe
 
 ## 当前状态
 
-v0.2.2 让悬浮窗整个可见区域都支持拖动，并保留左、右、上、下四个屏幕边界的吸附与自动缩入。Python 业务层、SQLite 数据结构和 Windows 集成保持不变。
+v0.3.0 增加本机 MCP 创建/查询工具和 GitHub 正式版检测，并精简安装依赖。任务数据库结构保持兼容。
 
 已完成：
 
@@ -319,7 +323,7 @@ Original process documents are kept under [docs/archive](docs/archive/).
 
 ## Current Status
 
-v0.2.2 makes the entire visible floating window draggable while preserving snap and auto-collapse behavior on all four screen edges. The Python business layer, SQLite schema, and Windows integrations remain unchanged.
+v0.3.0 adds local stdio MCP tools for creating and querying tasks, GitHub release checks, and smaller packaging. The task database schema remains compatible. See [Agent setup and updates](docs/agent-and-updates.md).
 
 Completed:
 

@@ -25,6 +25,7 @@ from ddl_reminder.ui.app_controller import AppController
 from ddl_reminder.ui.floating_window_controller import FloatingWindowController
 from ddl_reminder.ui.qml_resources import qml_path
 from ddl_reminder.ui.resources import app_icon_path
+from ddl_reminder.ui.update_controller import UpdateController
 
 
 class ApplicationRuntime:
@@ -48,6 +49,7 @@ class ApplicationRuntime:
         reminder_timer,
         instance_lock,
         database_engine=None,
+        update_controller=None,
     ) -> None:
         self.application = application
         self.engine = engine
@@ -64,6 +66,7 @@ class ApplicationRuntime:
         self.reminder_timer = reminder_timer
         self.instance_lock = instance_lock
         self.database_engine = database_engine
+        self.update_controller = update_controller
         self._shut_down = False
 
     def show_main_window(self) -> None:
@@ -81,6 +84,8 @@ class ApplicationRuntime:
             return
         self._shut_down = True
         self.reminder_timer.stop()
+        if self.update_controller is not None:
+            self.update_controller.shutdown()
         self.root.prepareToQuit()
         self.tray_icon.hide()
         self.instance_lock.unlock()
@@ -124,9 +129,11 @@ def create_application_runtime(
     autostart_service = autostart or WindowsAutostart()
     controller = AppController(task_service, autostart_service)
     floating_controller = FloatingWindowController()
+    update_controller = UpdateController()
 
     engine = QQmlApplicationEngine()
     engine.rootContext().setContextProperty("appController", controller)
+    engine.rootContext().setContextProperty("updateController", update_controller)
     engine.rootContext().setContextProperty(
         "floatingWindowController", floating_controller
     )
@@ -149,6 +156,12 @@ def create_application_runtime(
     tray_menu.addSeparator()
     quit_action = tray_menu.addAction("退出")
     tray_icon.setContextMenu(tray_menu)
+    update_controller.updateAvailable.connect(
+        lambda version: tray_icon.showMessage(
+            "DDL Reminder 更新",
+            f"发现新版 {version}，请打开主窗口或设置页下载。",
+        )
+    )
 
     if reminder_runner is None:
         notifier = DesktopNotifier(tray_icon)
@@ -180,6 +193,7 @@ def create_application_runtime(
         reminder_timer=reminder_timer,
         instance_lock=lock,
         database_engine=database_engine,
+        update_controller=update_controller,
     )
 
     show_main_action.triggered.connect(runtime.show_main_window)
@@ -196,6 +210,7 @@ def create_application_runtime(
     app.aboutToQuit.connect(runtime.shutdown)
 
     tray_icon.show()
+    QTimer.singleShot(3000, update_controller.checkAutomatically)
     reminder_runner.run_once()
     if is_autostart_launch(argv):
         runtime.show_floating_window()

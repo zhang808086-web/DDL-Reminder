@@ -14,6 +14,7 @@ from ddl_reminder.infrastructure.in_memory_task_repository import InMemoryTaskRe
 from ddl_reminder.ui.app_controller import AppController
 from ddl_reminder.ui.floating_window_controller import FloatingWindowController
 from ddl_reminder.ui.qml_resources import qml_path
+from ddl_reminder.ui.update_controller import UpdateController
 
 
 def _find_visual_child(item: QQuickItem, object_name: str):
@@ -63,7 +64,9 @@ def test_main_qml_loads_with_required_shell_objects_and_root_api():
         screen_geometry_provider=lambda _window: QRect(0, 0, 1920, 1080),
     )
     engine = QQmlApplicationEngine()
+    updates = UpdateController()
     engine.rootContext().setContextProperty("appController", controller)
+    engine.rootContext().setContextProperty("updateController", updates)
     engine.rootContext().setContextProperty(
         "floatingWindowController", floating_controller
     )
@@ -78,6 +81,18 @@ def test_main_qml_loads_with_required_shell_objects_and_root_api():
     root = engine.rootObjects()[0]
     root.showMainWindow()
     application.processEvents()
+    root.openSettings()
+    application.processEvents()
+    settings_dialog = root.findChild(QObject, "settingsDialog")
+    assert settings_dialog.property("visible") is True
+    settings_dialog.setProperty("visible", False)
+    updates.updateAvailable.emit("999.0.0")
+    application.processEvents()
+    update_dialog = root.findChild(QObject, "updateDialog")
+    assert update_dialog.property("visible") is True
+    assert "999.0.0" in update_dialog.property("heading")
+    update_dialog.setProperty("visible", False)
+    assert warnings == []
     assert root.objectName() == "mainWindow"
     for name in ("sidebar", "searchField", "createTaskButton", "taskList"):
         assert root.findChild(QObject, name) is not None
@@ -164,3 +179,4 @@ def test_main_qml_loads_with_required_shell_objects_and_root_api():
     assert observed_dragging == [True, True, True, True]
     objects["floatingWindow"].setProperty("visible", False)
     root.close()
+    updates.shutdown()

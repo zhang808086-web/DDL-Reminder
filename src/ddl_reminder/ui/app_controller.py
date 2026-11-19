@@ -7,6 +7,7 @@ from PySide6.QtCore import QObject, Property, Signal, Slot
 
 from ddl_reminder.domain.deadline import DeadlineCategory, classify_deadline
 from ddl_reminder.domain.exceptions import TaskError
+from ddl_reminder.domain.deadline_input import parse_deadline
 from ddl_reminder.infrastructure.autostart import (
     WindowsAutostart,
     build_autostart_command,
@@ -249,7 +250,7 @@ class AppController(QObject):
 
     @staticmethod
     def _parse_deadline(date_text: str, time_text: str) -> tuple[date, time]:
-        return date.fromisoformat(date_text), time.fromisoformat(time_text)
+        return parse_deadline(date_text, time_text)
 
     def _change_task(self, error_title: str, operation: Callable[[], object]) -> bool:
         try:

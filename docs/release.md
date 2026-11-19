@@ -1,5 +1,25 @@
 # 发布说明 / Release Notes
 
+## v0.3.0
+
+- 新增本机 MCP stdio 服务，安装包包含独立的 DDL-Reminder-MCP.exe，共享运行依赖。
+- Agent 可获取本机时间、创建任务、查询列表和读取任务详情，数据存入当前 Windows 用户的数据库。
+- 日期时间采用严格格式与有效日期校验，支持闰年与 00:00–23:59 边界。
+- 后台检测 GitHub 最新正式版，提供托盘通知、设置页检查与浏览器下载安装包入口。
+- 精简未使用的 Qt/QML 依赖、翻译与图片，使用 LZMA2 压缩。
+- 安装升级清理旧运行依赖，数据库位置和结构保持兼容。
+- 旧版用户需手动安装一次 v0.3.0，之后才能收到后续更新通知。
+
+Agent 接入方法见 [接入与更新说明](agent-and-updates.md)。
+
+验证：147 项测试通过，安装包 62.40 MiB，较 v0.2.2 减少 47.19%。
+安装、覆盖升级、历史依赖清理及数据库保留验证通过。
+详见 [发布验证记录](release-verification-v0.3.0.md)。
+
+Local stdio MCP tools, strict calendar/time validation, GitHub update checks,
+and smaller Windows packaging. Existing users need one manual upgrade to gain
+the update checker. MCP clients must configure the installed executable once.
+
 ## v0.2.2
 
 悬浮窗拖动与四边缩入修复版本，不增加业务功能，也不改变数据库结构。

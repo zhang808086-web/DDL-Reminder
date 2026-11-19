@@ -1,11 +1,17 @@
 [project]
 name = "ddl-reminder"
-version = "0.2.2"
+version = "0.3.0"
 requires-python = ">=3.11"
 dependencies = [
     "SQLAlchemy>=2.0,<3.0",
     "Pyside6>=6.0",
+    "mcp>=1.28,<2",
+    "packaging>=24,<27",
 ]
+
+[project.scripts]
+ddl-reminder = "ddl_reminder.main:main"
+ddl-reminder-mcp = "ddl_reminder.mcp_server:main"
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

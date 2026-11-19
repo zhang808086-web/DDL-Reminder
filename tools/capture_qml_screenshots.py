@@ -15,6 +15,7 @@ from ddl_reminder.infrastructure.in_memory_task_repository import InMemoryTaskRe
 from ddl_reminder.ui.app_controller import AppController
 from ddl_reminder.ui.floating_window_controller import FloatingWindowController
 from ddl_reminder.ui.qml_resources import qml_path
+from ddl_reminder.ui.update_controller import UpdateController
 
 
 NOW = datetime(2026, 10, 7, 14, 30)
@@ -82,7 +83,9 @@ def main() -> int:
         screen_geometry_provider=lambda _window: QRect(0, 0, 1920, 1080),
     )
     engine = QQmlApplicationEngine()
+    updates = UpdateController()
     engine.rootContext().setContextProperty("appController", controller)
+    engine.rootContext().setContextProperty("updateController", updates)
     engine.rootContext().setContextProperty(
         "floatingWindowController", floating_controller
     )
@@ -120,6 +123,7 @@ def main() -> int:
 
     detail.setProperty("visible", False)
     root.prepareToQuit()
+    updates.shutdown()
     return 0
 
 

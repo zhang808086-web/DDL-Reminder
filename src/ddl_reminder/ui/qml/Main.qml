@@ -328,6 +328,18 @@ ApplicationWindow {
     }
     SettingsDialog { id: settingsDialog }
     ConfirmDialog { id: confirmDialog }
+    ConfirmDialog { id: updateDialog; objectName: "updateDialog" }
+    Connections {
+        target: updateController
+        function onUpdateAvailable(version) {
+            updateDialog.ask(
+                "发现新版本 " + version,
+                "是否下载新版安装包？下载后请退出应用，再运行安装包完成升级。",
+                "下载新版", false,
+                function() { updateController.openDownload() }
+            )
+        }
+    }
     FloatingWindow {
         id: floatingWindow
         onTaskOpenRequested: function(taskId) { root.openTaskDetails(taskId) }

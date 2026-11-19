@@ -65,8 +65,26 @@ Dialog {
             font.family: App.Theme.fontFamily
             font.pixelSize: 11
         }
+        Text {
+            text: "当前版本 " + updateController.currentVersion + " · " + updateController.status
+            color: App.Theme.textSecondary
+            wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            font.family: App.Theme.fontFamily
+            font.pixelSize: 12
+        }
         RowLayout {
             Layout.fillWidth: true
+            AppButton {
+                text: updateController.checking ? "检查中…" : "检查更新"
+                enabled: !updateController.checking
+                onClicked: updateController.checkNow()
+            }
+            AppButton {
+                visible: updateController.hasUpdate
+                text: "下载新版"
+                onClicked: updateController.openDownload()
+            }
             Item { Layout.fillWidth: true }
             AppButton { text: "完成"; primary: true; onClicked: dialog.close() }
         }
