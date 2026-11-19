@@ -1,6 +1,19 @@
 # 发布说明 / Release Notes
 
-## v0.3.1
+## v0.3.2
+
+- 修复后台每两分钟检测 Agent 时命令行短暂闪现的问题。
+- 定时任务直接启动无控制台的 DDL-Reminder-Agent-Setup.exe，不再周期性启动 PowerShell。
+- 后台注册不加载 Qt 界面，也不启动 MCP 控制台子进程；失败写日志并返回错误码。
+- 升级时迁移或清理旧版任务；保留 Claude Code、Codex 和 DeepSeek 接入及任务数据库。
+- 新增原生可执行文件子系统检查与 Windows 窗口事件监测，覆盖重复启动和周期任务执行。
+
+验证：164 项测试通过；Windows 隔离安装和覆盖升级通过；本机定时任务观察 150 秒无控制台窗口事件。
+安装包 63.80 MiB。详见 [实机验证记录](release-verification-v0.3.2.md)。
+
+## v0.3.1（已撤回）
+
+因周期启动 PowerShell 可能导致命令行闪窗，此 Release 已撤回，请使用修复版。
 
 - 安装时自动接入 Claude Code、Codex 和 DeepSeek Harness 的本机 MCP。
 - 提前建立 Claude Code、Codex 用户配置；登录及每 2 分钟检测后来初始化的 DeepSeek profile。

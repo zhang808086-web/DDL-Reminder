@@ -5,7 +5,8 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if ($ConnectOnly) {
-    $child = Start-Process -FilePath $McpExecutable -ArgumentList '--connect-agents' -WindowStyle Hidden -PassThru -Wait
+    $background = Join-Path (Split-Path -Parent $McpExecutable) 'DDL-Reminder-Agent-Setup.exe'
+    $child = Start-Process -FilePath $background -WindowStyle Hidden -PassThru -Wait
     exit $child.ExitCode
 }
 $sid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
@@ -21,13 +22,15 @@ if ($Disable) {
         if ($existing.Definition.RegistrationInfo.Description -ne 'DDL Reminder per-user MCP auto-connect') {
             throw 'Refusing to remove an unrecognized scheduled task'
         }
-        if (-not $existing.Definition.Actions.Item(1).Arguments.Contains('"' + $McpExecutable + '"')) {
+        $background = Join-Path (Split-Path -Parent $McpExecutable) 'DDL-Reminder-Agent-Setup.exe'
+        $action = $existing.Definition.Actions.Item(1)
+        if ($action.Path -ne $background -and -not $action.Arguments.Contains('"' + $McpExecutable + '"')) {
             return # Another installation owns this user's auto-connect task.
         }
         $folder.DeleteTask($taskName, 0)
     }
 } else {
-    $exe = (Resolve-Path -LiteralPath $McpExecutable).Path
+    $exe = (Resolve-Path -LiteralPath (Join-Path (Split-Path -Parent $McpExecutable) 'DDL-Reminder-Agent-Setup.exe')).Path
     $task = $service.NewTask(0)
     $task.RegistrationInfo.Description = 'DDL Reminder per-user MCP auto-connect'
     $task.Principal.UserId = $sid
@@ -49,8 +52,8 @@ if ($Disable) {
     $logon.Delay = 'PT30S'
     $logon.Enabled = $true
     $action = $task.Actions.Create(0)
-    $action.Path = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
-    $action.Arguments = '-WindowStyle Hidden -NoProfile -NonInteractive -File "' + $PSCommandPath + '" -McpExecutable "' + $exe + '" -ConnectOnly'
+    $action.Path = $exe
+    $action.Arguments = ''
     $action.WorkingDirectory = Split-Path -Parent $exe
     $null = $folder.RegisterTaskDefinition($taskName, $task, 6, $sid, $null, 3)
 }

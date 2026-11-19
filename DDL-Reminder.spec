@@ -115,6 +115,28 @@ mcp_exe = EXE(
     icon="src\\ddl_reminder\\ui\\assets\\app_icon.ico",
 )
 
+# Task Scheduler must launch a GUI-subsystem binary directly. Hiding a console
+# after powershell.exe starts cannot prevent the initial console allocation.
+background_analysis = Analysis(
+    ["src\\ddl_reminder\\agent_background.py"],
+    pathex=["src"],
+    excludes=["PySide6", "mcp", "sqlalchemy", "tkinter", "pytest"],
+)
+background_analysis.binaries = [
+    entry for entry in background_analysis.binaries if _should_bundle_binary(entry)
+]
+background_pyz = PYZ(background_analysis.pure)
+background_exe = EXE(
+    background_pyz,
+    background_analysis.scripts,
+    [],
+    exclude_binaries=True,
+    name="DDL-Reminder-Agent-Setup",
+    console=False,
+    disable_windowed_traceback=True,
+    icon="src\\ddl_reminder\\ui\\assets\\app_icon.ico",
+)
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
@@ -138,11 +160,14 @@ exe = EXE(
 coll = COLLECT(
     exe,
     mcp_exe,
+    background_exe,
     a.binaries,
     a.zipfiles,
     a.datas,
     mcp_analysis.binaries,
     mcp_analysis.datas,
+    background_analysis.binaries,
+    background_analysis.datas,
     strip=False,
     upx=True,
     upx_exclude=[],

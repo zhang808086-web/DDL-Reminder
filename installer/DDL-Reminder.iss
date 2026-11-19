@@ -1,5 +1,5 @@
 #define MyAppName "DDL Reminder"
-#define MyAppVersion "0.3.1"
+#define MyAppVersion "0.3.2"
 #define MyAppPublisher "DDL Reminder"
 #define MyAppExeName "DDL-Reminder.exe"
 #ifndef AppSource
@@ -48,7 +48,9 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFile
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\DDL-Reminder-MCP.exe"; Parameters: "--connect-agents"; Tasks: connectagents; Flags: runhidden waituntilterminated
+; Always retire the previous shell-based task, including opt-out upgrades.
+Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -NonInteractive -File ""{app}\Configure-Agent-Autoconnect.ps1"" -McpExecutable ""{app}\DDL-Reminder-MCP.exe"" -Disable"; Flags: runhidden waituntilterminated
+Filename: "{app}\DDL-Reminder-Agent-Setup.exe"; Tasks: connectagents; Flags: runhidden waituntilterminated
 Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -NonInteractive -File ""{app}\Configure-Agent-Autoconnect.ps1"" -McpExecutable ""{app}\DDL-Reminder-MCP.exe"""; Tasks: connectagents; Flags: runhidden waituntilterminated
 Filename: "{app}\{#MyAppExeName}"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent
 
