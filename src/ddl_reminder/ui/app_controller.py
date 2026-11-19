@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from datetime import date, datetime, time
+import json
+import os
+from pathlib import Path
 
-from PySide6.QtCore import QObject, Property, Signal, Slot
+from PySide6.QtCore import QObject, Property, QProcess, Signal, Slot
 
 from ddl_reminder.domain.deadline import DeadlineCategory, classify_deadline
 from ddl_reminder.domain.exceptions import TaskError
@@ -14,6 +17,8 @@ from ddl_reminder.infrastructure.autostart import (
     is_packaged_app,
 )
 from ddl_reminder.ui.task_list_model import TaskListModel
+from ddl_reminder.infrastructure.agent_setup import connect_agents, installed_mcp_command
+from ddl_reminder.infrastructure.app_paths import get_app_data_dir
 
 
 class AppController(QObject):
@@ -21,6 +26,7 @@ class AppController(QObject):
     errorRequested = Signal(str, str)
     autostartChanged = Signal(bool)
     viewStateChanged = Signal()
+    agentSetupChanged = Signal()
 
     def __init__(
         self,
@@ -41,6 +47,8 @@ class AppController(QObject):
         self._autostart_command = build_autostart_command()
         self._current_filter = "active"
         self._search_query = ""
+        self._agent_setup_status = "安装时自动接入已检测到的 Agent，也可在此重新接入。"
+        self._agent_setup_process = None
         self._section_title = "进行中"
         self._section_count = 0
         self._main_model = TaskListModel(self)
@@ -56,6 +64,55 @@ class AppController(QObject):
     @Property(QObject, constant=True)
     def mainModel(self) -> TaskListModel:
         return self._main_model
+
+    @Property(str, notify=agentSetupChanged)
+    def agentSetupStatus(self) -> str:
+        return self._agent_setup_status
+
+    @Property(bool, notify=agentSetupChanged)
+    def agentAutoConnectEnabled(self) -> bool:
+        try:
+            state = json.loads((get_app_data_dir() / "agent-autoconnect.json").read_text(encoding="utf-8-sig"))
+            return state.get("enabled") is True
+        except (OSError, ValueError):
+            return False
+
+    @Slot(bool)
+    def setAgentAutoConnect(self, enabled: bool) -> None:
+        if self._agent_setup_process is not None:
+            return
+        command = installed_mcp_command()
+        script = Path(command).with_name("Configure-Agent-Autoconnect.ps1")
+        if not script.is_file():
+            self._agent_setup_status = "此功能需要安装版，请升级应用。"
+            self.agentSetupChanged.emit()
+            return
+        process = QProcess(self)
+        self._agent_setup_process = process
+        arguments = ["-WindowStyle", "Hidden", "-NoProfile", "-NonInteractive", "-File", str(script), "-McpExecutable", command]
+        if not enabled:
+            arguments.append("-Disable")
+        def finished(*_args):
+            self._agent_setup_process = None
+            self._agent_setup_status = "自动接入设置已更新。" if process.exitCode() == 0 else "自动接入设置失败，请重试或检查系统策略。"
+            self.agentSetupChanged.emit()
+            process.deleteLater()
+        process.finished.connect(finished)
+        process.errorOccurred.connect(lambda _error: finished() if self._agent_setup_process is process else None)
+        process.start(str(Path(os.environ.get("SystemRoot", "C:/Windows")) / "System32/WindowsPowerShell/v1.0/powershell.exe"), arguments)
+
+    @Slot()
+    def connectAgents(self) -> None:
+        try:
+            results = connect_agents(installed_mcp_command())
+            self._agent_setup_status = "\n".join(
+                f"{item['client']}：{item['message']}" for item in results
+            ) if results else "未找到已安装的 Agent，安装后可在此重新接入。"
+            if results and all(item["success"] for item in results):
+                self._agent_setup_status += "\n请重启 Agent 或开启新会话以加载工具。"
+        except (OSError, ValueError):
+            self._agent_setup_status = "接入失败，请确认正在使用安装版。"
+        self.agentSetupChanged.emit()
 
     @Property(QObject, constant=True)
     def floatingModel(self) -> TaskListModel:

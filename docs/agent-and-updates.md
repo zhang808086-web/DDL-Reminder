@@ -1,6 +1,37 @@
 # 本机 Agent 接入、打包精简与新版检查
 
-v0.3.0 提供本机 MCP 服务、依赖精简和新版检测。安装后在 agent 中配置下列入口即可调用。
+v0.3.1 默认在安装时完成本机 Agent 接入；下方配置仅用于参考和特殊环境排错。
+
+## 自动接入（v0.3.1）
+
+安装器默认选中自动接入，无需用户编辑配置。Claude Code 和 Codex 的用户级
+配置会提前建立；即使客户端以后才安装，首次读取用户配置时也能发现服务。
+DeepSeek Harness 会检测 `$DSH_HOME/profiles/*/package.json` 下已初始化的 profile，
+为各 profile 的 `cordis.patch.yml` 添加独立 MCP 客户端条目。
+
+同时注册当前 Windows 用户的计划任务：登录后检查，并每 2 分钟检测一次后来
+出现的 DeepSeek profile。此任务不需要 DDL Reminder 窗口一直运行；关机期间
+不执行，系统恢复且用户登录后继续。任务以普通用户权限执行，后台隐藏运行。
+设置页可关闭/恢复此检测，也可点击“一键接入 Agent”立即重试。
+首次注册客户端后，需要其重载配置或打开新会话；客户端原有审批要求仍生效。
+
+配置修改前备份到原文件同目录的 `*.ddl-backup-*`，保留其他 MCP、模型、
+凭据、权限及注释。重复检测不会重复添加或覆盖用户主动停用的 Codex 服务。
+同名冲突或损坏配置会跳过并记录报告，不覆盖原文件。
+报告为 `%APPDATA%/DDL-Reminder/agent-setup.json`，后台检测状态为
+`agent-autoconnect.json`。卸载应用时移除该安装所拥有的检测任务。
+
+自动接入配置仅解决本机 MCP 的发现与连接；Agent 本身仍需已登录且模型可用。
+不会修改模型供应商、API 密钥或取消工具权限审批。
+
+官方配置依据：
+
+- [Claude Code 用户级 MCP](https://code.claude.com/docs/en/mcp#user-scope)：`~/.claude.json` 的 `mcpServers`。
+- [Codex MCP](https://developers.openai.com/codex/mcp)：`~/.codex/config.toml` 的 `mcp_servers`。
+- [DeepSeek Harness MCP 客户端](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.zh.md)：profile patch 内的 `@deepseek-ai/dsh-mcp-client`。
+
+支持标准用户目录，并尊重 `CLAUDE_CONFIG_DIR`、`CODEX_HOME`、`DSH_HOME`。
+客户端使用其他账号、容器或 WSL 时，需在其实际运行环境配置可访问的 MCP 入口。
 
 ## 本机 MCP 服务
 
@@ -28,7 +59,7 @@ v0.3.0 提供本机 MCP 服务、依赖精简和新版检测。安装后在 agen
 ```
 
 不同客户端的外层配置格式可能不同；核心是 command 指向 MCP exe，args 为空。
-不自动修改 agent 配置。该进程按启动它的 Windows 账号访问
+该进程按启动它的 Windows 账号访问
 `%APPDATA%/DDL-Reminder/tasks.db`，不监听端口。不要为 MCP 使用另一个账号
 或重定向 APPDATA，否则会访问另一个用户数据目录。
 
@@ -62,7 +93,7 @@ MCP SDK 本身会引入新依赖，最终体积需在后续实际构建后测量
 
 发布前需同步 pyproject.toml、src/ddl_reminder/version.py 和 installer/DDL-Reminder.iss
 中的版本；Release 安装包应命名为 DDL-Reminder-Setup-v<版本>.exe。
-当前版本为 0.3.0。
+当前版本为 0.3.1。
 
 已安装的旧版没有更新检测，用户需要先手动升级一次，之后才有此入口。
 

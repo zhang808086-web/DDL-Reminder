@@ -1,5 +1,19 @@
 # 发布说明 / Release Notes
 
+## v0.3.1
+
+- 安装时自动接入 Claude Code、Codex 和 DeepSeek Harness 的本机 MCP。
+- 提前建立 Claude Code、Codex 用户配置；登录及每 2 分钟检测后来初始化的 DeepSeek profile。
+- 自动配置仅操作 DDL Reminder 的服务条目，备份原文件，保留其他服务、模型和权限；冲突时保留原文。
+- 设置页增加一键接入、后台自动检测开关，并支持小窗口滚动。
+- MCP 只读工具增加只读提示，创建任务保留写操作与非幂等提示。
+- Windows 卸载流程清理本安装拥有的自动接入任务。
+
+客户端首次加载仍可能要求重启会话或授权，模型和账号须由客户端正常配置。
+
+验证：162 项测试通过；Windows 隔离安装、覆盖升级、生产库保留和三种本机 MCP 调用链验证完成。
+安装包 63.17 MiB。详见 [实机验证记录](release-verification-v0.3.1.md)。
+
 ## v0.3.0
 
 - 新增本机 MCP stdio 服务，安装包包含独立的 DDL-Reminder-MCP.exe，共享运行依赖。

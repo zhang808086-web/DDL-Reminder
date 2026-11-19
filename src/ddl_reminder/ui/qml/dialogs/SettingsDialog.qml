@@ -11,6 +11,7 @@ Dialog {
     x: Math.round((parent.width - width) / 2)
     y: Math.round((parent.height - height) / 2)
     width: Math.min(470, parent.width - 48)
+    height: Math.min(implicitHeight, parent.height - 48)
     modal: true
     padding: 26
 
@@ -21,7 +22,15 @@ Dialog {
         radius: App.Theme.radiusPanel
         border.color: App.Theme.border
     }
-    contentItem: ColumnLayout {
+    contentItem: ScrollView {
+      id: settingsScroll
+      implicitHeight: settingsContent.implicitHeight
+      contentWidth: availableWidth
+      clip: true
+      ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+      ColumnLayout {
+        id: settingsContent
+        width: settingsScroll.availableWidth
         spacing: 20
         RowLayout {
             Layout.fillWidth: true
@@ -73,6 +82,34 @@ Dialog {
             font.family: App.Theme.fontFamily
             font.pixelSize: 12
         }
+        Text {
+            text: "Agent 接入\n" + appController.agentSetupStatus
+            color: App.Theme.textSecondary
+            wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            font.family: App.Theme.fontFamily
+            font.pixelSize: 12
+        }
+        AppButton {
+            text: "一键接入 Agent"
+            Layout.fillWidth: true
+            onClicked: appController.connectAgents()
+        }
+        RowLayout {
+            Layout.fillWidth: true
+            Text {
+                Layout.fillWidth: true
+                text: "自动接入后来安装的 Agent（每 2 分钟检测）"
+                color: App.Theme.textSecondary
+                font.family: App.Theme.fontFamily
+                font.pixelSize: 11
+                wrapMode: Text.Wrap
+            }
+            Switch {
+                checked: appController.agentAutoConnectEnabled
+                onToggled: appController.setAgentAutoConnect(checked)
+            }
+        }
         RowLayout {
             Layout.fillWidth: true
             AppButton {
@@ -88,5 +125,6 @@ Dialog {
             Item { Layout.fillWidth: true }
             AppButton { text: "完成"; primary: true; onClicked: dialog.close() }
         }
+      }
     }
 }

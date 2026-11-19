@@ -1,6 +1,6 @@
 # DDL Reminder
 
-v0.3.0 新增本机 MCP 服务与新版检测，并精简安装包依赖。见 [Agent 接入与更新说明](docs/agent-and-updates.md)。
+v0.3.1 支持安装时自动接入 Claude Code、Codex 和 DeepSeek Harness，并自动补齐后来安装的 Agent。见 [Agent 接入与更新说明](docs/agent-and-updates.md)。
 
 DDL Reminder 是一个 Windows 桌面 DDL 提醒工具，用来让重要截止时间始终保持可见。
 
@@ -142,7 +142,7 @@ dist/DDL-Reminder/DDL-Reminder.exe
 
 ## 当前状态
 
-v0.3.0 增加本机 MCP 创建/查询工具和 GitHub 正式版检测，并精简安装依赖。任务数据库结构保持兼容。
+v0.3.1 安装时自动接入本机 Agent，并为后来安装的客户端自动补齐配置；保留 MCP 创建/查询工具、GitHub 正式版检测和精简安装依赖。
 
 已完成：
 
@@ -323,7 +323,7 @@ Original process documents are kept under [docs/archive](docs/archive/).
 
 ## Current Status
 
-v0.3.0 adds local stdio MCP tools for creating and querying tasks, GitHub release checks, and smaller packaging. The task database schema remains compatible. See [Agent setup and updates](docs/agent-and-updates.md).
+v0.3.1 automatically configures local agent MCP connections during installation and detects clients installed later. It retains task creation/query tools, GitHub release checks and smaller packaging. See [Agent setup and updates](docs/agent-and-updates.md).
 
 Completed:
 

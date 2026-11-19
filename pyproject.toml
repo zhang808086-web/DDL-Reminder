@@ -1,12 +1,13 @@
 [project]
 name = "ddl-reminder"
-version = "0.3.0"
+version = "0.3.1"
 requires-python = ">=3.11"
 dependencies = [
     "SQLAlchemy>=2.0,<3.0",
     "Pyside6>=6.0",
     "mcp>=1.28,<2",
     "packaging>=24,<27",
+    "PyYAML>=6,<7",
 ]
 
 [project.scripts]

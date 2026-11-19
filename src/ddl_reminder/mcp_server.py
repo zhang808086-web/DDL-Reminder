@@ -5,6 +5,7 @@ import sys
 from datetime import datetime
 
 from mcp.server.fastmcp import FastMCP
+from mcp.types import ToolAnnotations
 
 from ddl_reminder.application.task_service import TaskService
 from ddl_reminder.domain.deadline_input import parse_deadline
@@ -40,12 +41,12 @@ def create_server(service: TaskService) -> FastMCP:
         ),
     )
 
-    @server.tool()
+    @server.tool(annotations=ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=False))
     def get_local_time() -> dict:
         """Get the computer's current local time and UTC offset for relative dates."""
         return {"local_time": datetime.now().astimezone().isoformat()}
 
-    @server.tool()
+    @server.tool(annotations=ToolAnnotations(readOnlyHint=False, destructiveHint=False, idempotentHint=False, openWorldHint=False))
     def create_task(
         title: str, deadline_date: str, deadline_time: str = "23:59", description: str = ""
     ) -> dict:
@@ -58,7 +59,7 @@ def create_server(service: TaskService) -> FastMCP:
         task = service.create_task(title, day, clock, description)
         return task_data(task)
 
-    @server.tool()
+    @server.tool(annotations=ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=False))
     def list_tasks(completed: bool = False, limit: int = 50) -> list[dict]:
         """List active tasks by default, sorted by deadline; limit is 1–200."""
         if not 1 <= limit <= 200:
@@ -68,7 +69,7 @@ def create_server(service: TaskService) -> FastMCP:
             tasks, key=lambda task: (task.deadline, task.created_at)
         )[:limit]]
 
-    @server.tool()
+    @server.tool(annotations=ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=False))
     def get_task(task_id: int) -> dict:
         """Read a task by its ID, including its deadline and completion state."""
         return task_data(service.get_task(task_id))
@@ -77,6 +78,15 @@ def create_server(service: TaskService) -> FastMCP:
 
 
 def main() -> int:
+    if sys.argv[1:] == ["--connect-agents"]:
+        import json
+        from ddl_reminder.infrastructure.agent_setup import connect_agents, installed_mcp_command
+        from ddl_reminder.infrastructure.app_paths import get_app_data_dir
+        results = connect_agents(installed_mcp_command())
+        report = json.dumps(results, ensure_ascii=False, indent=2)
+        (get_app_data_dir() / "agent-setup.json").write_text(report, encoding="utf-8")
+        print(report)
+        return 0 if all(item["success"] for item in results) else 1
     # stdout is reserved for the MCP protocol, including in the packaged executable.
     logging.basicConfig(stream=sys.stderr, level=logging.WARNING)
     path = get_database_path()
